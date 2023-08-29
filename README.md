@@ -58,7 +58,7 @@ No Comercial: Usted no puede hacer uso del material con propósitos comerciales.
 
 * [Tablero en Trello] - https://trello.com/b/EyWUT1th/proyecto-ins
 
-* [Enlace a Diseños en Mockups] - https://drive.google.com/file/d/1_ohTl0itEtzMre3H2g_ukgyNFAkKeGC5/view?usp=sharing
+* [Enlace a Diseños en Mockups] - https://drive.google.com/file/d/18WeJXxl6gZfuED0PzRA0A9b0606Vl5T9/view?usp=sharing
 
 * [Enlace al funcionamiento de los Mockups] - https://drive.google.com/file/d/1tQtwwSSmcWD4Qi9xdYeY1Lz8F16bEJ6X/view?usp=sharing
 
