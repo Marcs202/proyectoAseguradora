@@ -12,11 +12,11 @@ Es un proyecto pensado como usuarios principales los talleres subcontratados por
 * [Visual Studio] https://code.visualstudio.com/download - Editor de código fuente que les permitirá a nuestros desarrolladores la creación de nuestro
 sitio web.
 
-*[Node js] https://nodejs.org/es
+* [Node js] https://nodejs.org/es
 
-*[React js] https://react.dev/learn/start-a-new-react-project
+* [React js] https://react.dev/learn/start-a-new-react-project
 
-*[SQL Server Developer]  https://www.microsoft.com/es-es/sql-server/sql-server-downloads
+* [SQL Server Developer]  https://www.microsoft.com/es-es/sql-server/sql-server-downloads
  
 
 
