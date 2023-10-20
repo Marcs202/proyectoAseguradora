@@ -1,7 +1,22 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect } from 'react';
+import axiosInstance from './config/axios-config';
 
 function App() {
+  useEffect(()=>{
+    axiosInstance.get('/')
+      .then(function (response) {
+        console.log('Respuesta:',response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+      });
+  },[])
+
   return (
     <div className="App">
       <header className="App-header">
