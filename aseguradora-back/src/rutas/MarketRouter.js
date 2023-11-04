@@ -1,9 +1,8 @@
 import express from 'express';
-
-import { Bienvenido2 } from './controladores/MarketController.js';
+import { GetAll } from './controladores/MarketController.js';
 const router = express.Router();
 
-router.get('/', Bienvenido2);
+router.get('/',GetAll );
 
 export default router;
 
