@@ -2,7 +2,7 @@ import { getConnection,sql } from "../../database/conexion.js";
 import { queriesReparaciones } from "../../database/consultas/Reparaciones.js";
 
 export const GetAll = async (req, res, next) => {
-  console.log('Ejecutando GetAll...');
+
   let response = {};
   try {
     const orderby = req.body.orderby || "asc";
@@ -14,7 +14,7 @@ export const GetAll = async (req, res, next) => {
     const generateSQL = queriesReparaciones(orderby, ordenar);
 
     const ressDataToFetch = await pool.request().query(generateSQL.getAll);
-    console.log(ressDataToFetch);
+
     if (ressDataToFetch.recordset) {
       const response = {
         codigo: "00",
