@@ -52,23 +52,38 @@ export default function Ingresar() {
     return e?.fileList;
   };
 
-  const ConvertirBase64 = (archivos) => {
+  const getBase64 = file => {
+    return new Promise(resolve => {
+      let baseURL = "";
 
-    Array.from(archivos).forEach(archivo => {
-      var reader = new FileReader();
-      reader.readAsDataURL(archivo);
-      reader.onload=function(){
-        var ArrayAuxiliar = [];
+      let reader = new FileReader();
 
-        var base64 = reader.result;
+      // Convert the file to base64 text
+      reader.readAsDataURL(file);
 
-        ArrayAuxiliar = base64.split(',');
-        console.log(ArrayAuxiliar[1]);
-      }
-    })
-  }
+      // on reader load somthing...
+      reader.onload = () => {
+        baseURL = reader.result;
+        resolve(baseURL);
+      };
+    });
+  };
 
+  const handleFileInputChange = e => {
+    let file = e.target.files[0];
 
+    getBase64(file)
+      .then(result => {
+        file["base64"] = result;
+        let nombre = file.name;
+        let base64 = file.base64;
+        // console.log("Nombre: ", nombre);
+        // console.log("Base64: ", base64);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
 
   return (
@@ -130,24 +145,7 @@ export default function Ingresar() {
             </Form.Item>
 
             <Form.Item label="Cargar fotografia" valuePropName="fileList" getValueFromEvent={normFile}>
-              <Upload action="/upload.do" listType="picture-card" multiple>
-                <div>
-                  <PlusOutlined />
-                  <div
-                    style={{
-                      marginTop: 8,
-                    }}
-                  >
-                    Upload
-                  </div>
-                </div>
-              </Upload>
-            </Form.Item>
-  
-           
-
-            <Form.Item label="Cargar fotografia" valuePropName="fileList" getValueFromEvent={normFile}>
-              <input type='file' multiple onChange={(e)=>ConvertirBase64(e.target.files)}/>
+              <input id="upload" type="file" accept="image/*" onChange={handleFileInputChange}/>
             </Form.Item>
 
             <Form.Item label="" style={{marginLeft: '42%'}}>
