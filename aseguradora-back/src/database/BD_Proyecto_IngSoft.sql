@@ -157,3 +157,7 @@ insert into Piezas values
 ('3','4','1','e','3','7','0','33'),
 ('4','1','2','r','4','6','0','44')
 
+insert into Clientes values 
+('Juan Perez'),
+('Roberto Garcia'),
+('Cesar Guzman')
