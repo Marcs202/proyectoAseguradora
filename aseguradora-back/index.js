@@ -10,7 +10,7 @@ app.use(express.json());
 
 //routes
 app.use('/', BaseRouter);
-app.use('/market',MarketRouter);
+app.use('/api/market',MarketRouter);
 app.use('/api/reparaciones', ReparacionesRouter);
 
 const port = 5000;
