@@ -7,5 +7,7 @@ export const queriesReparaciones = (orderBy, ordenar) => {
 
     return {
         getAll: `SELECT * FROM ${tablename}`,
+        createReparacion: `INSERT INTO ${tablename} ([modelo],[placa],[fechaIngreso],[detalles],[imagen],[idCliente],[idMarca],[idTaller]) VALUES
+            (@modelo,@placa,@fechaIngreso,@detalles,@imagen,@idCliente,@idMarca,@idTaller)`,
     };
 };

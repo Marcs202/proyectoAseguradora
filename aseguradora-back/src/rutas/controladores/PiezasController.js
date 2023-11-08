@@ -17,11 +17,9 @@ export const PostPieza = async (req, res, next) => {
         let cantidad = req.body.cantidad;
         let precioCosto = req.body.precioCosto;
         let precioVenta = req.body.precioVenta;
-        
-
+        console.log(url);
         const pool = await getConnection();
         if (!pool) return res.status(500).json(errorConnectionMessage);
-
         const generateSQL = queriesPieza();
 
         const ressDataToFetch = await pool
@@ -34,7 +32,7 @@ export const PostPieza = async (req, res, next) => {
             .input('cantidad', sql.Int, cantidad)
             .input('precioCosto', sql.Decimal, precioCosto)
             .input('precioVenta', sql.Decimal, precioVenta)
-            .input('urlImagen', sql.Int, url)
+            .input('urlImagen', sql.VarChar, url)
             .query(generateSQL.insertPieza);
 
         if (ressDataToFetch.rowsAffected[0] > 0) {
