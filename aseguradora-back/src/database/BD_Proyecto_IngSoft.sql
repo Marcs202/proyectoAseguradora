@@ -24,6 +24,16 @@ CREATE TABLE Usuarios
 	nombre varchar(255) not null,
 );
 
+INSERT INTO [dbo].[Usuarios]
+           ([auth]
+           ,[correo]
+           ,[nombre])
+     VALUES
+           ('P1BdB2rfchhp8RhxvLvXykIeLAo1','js8215001@gmail.com','Taller 1'),
+		   ('rE03ZeFQUbVlUAKHKtTWcMPeqs32','jg447996@gmail.com','Super Admin'),
+		   ('bHUpSltBvWPxSknlUcw7n4HCcOA3','jg252865@gmail.com','Aseguradora 1')
+GO
+
 CREATE TABLE Proveedores
 (
 	idProveedor INT IDENTITY(1,1),
@@ -98,6 +108,18 @@ CREATE TABLE Aseguradoras
 	Constraint PK_Aseguradora Primary Key(idAseguradora)
 );
 
+INSERT INTO [dbo].[Aseguradoras]
+           ([NombreAseguradora]
+           ,[NumContactoAseg]
+           ,[eMailAseg]
+           ,[IdUsuario])
+     VALUES
+           ((SELECT nombre from Usuarios where nombre = 'Aseguradora 1'),
+		   '6115-3009',
+		   (SELECT correo from Usuarios where nombre = 'Aseguradora 1'),
+		   (SELECT IdUsuario from Usuarios where nombre = 'Aseguradora 1'))
+GO
+
 CREATE TABLE Talleres 
 (
 	idTaller INT IDENTITY(1,1),
@@ -107,6 +129,18 @@ CREATE TABLE Talleres
 	IdUsuario INT foreign key references Usuarios(IdUsuario),
 	Constraint PK_Taller Primary Key(idTaller)
 );
+
+INSERT INTO [dbo].[Talleres]
+           ([NombreTaller]
+           ,[DireccionTaller]
+           ,[idAseguradora]
+           ,[IdUsuario])
+     VALUES
+           ((SELECT nombre from Usuarios where nombre = 'Taller 1'),
+		   'Plaza Soyapango',
+		   (SELECT idAseguradora from Aseguradoras where NombreAseguradora = 'Aseguradora 1'),
+		   (SELECT IdUsuario from Usuarios where nombre = 'Taller 1'))
+GO
 
 CREATE TABLE Reparaciones
 (
