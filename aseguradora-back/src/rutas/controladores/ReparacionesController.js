@@ -107,7 +107,7 @@ export const CrearReparacion = async (req, res, next) => {
     const imagenBase64 = body.imagen;
     const imagenTitulo = body.imagenTitulo;
 
-    const imagenUrl = UploadFileToBucket(imagenBase64,imagenTitulo);
+    const imagenUrl = await UploadFileToBucket(imagenBase64,imagenTitulo);
 
     const pool = await getConnection();
     if (!pool) return res.status(500).json(errorConnectionMessage);
@@ -124,21 +124,30 @@ export const CrearReparacion = async (req, res, next) => {
     .input("idMarca", sql.Int, body.idMarca)
     .input("idTaller", sql.Int, body.idTaller)
     .query(generateSQL.createReparacion);
-
-    if (resInsert.recordset) {
+    
+    // console.log('Operacion Insert:',resInsert);
+    
+    if (resInsert.rowsAffected > 0) {
       const response = {
         codigo: "00",
-        registros: resInsert.recordset,
+        message: "Registro de Incidente exitoso",
       };
       return res.status(200).json(response);
     } else {
-      return res.status(400).json(errorParamsMessage);
+      return res.status(400).json(errorEjecucionInsercion);
     }
   } catch (error) {
     console.log("Se produjo una excepcion al procesar la peticion:", error);
     response.message = "Ocurrió un error al procesar la petición";
     res.status(400).json(response);
   }
+};
+
+export const errorEjecucionInsercion = {
+  ok: false,
+  data: [],
+  status: 400,
+  message: "Ocurrio un error al crear incidente",
 };
 
 export const errorParamsMessage = {
