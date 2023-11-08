@@ -9,6 +9,21 @@ USE bdSoftTalleres
 
 --///////////////// Seccion de Repuestos ///////////////// 
 
+CREATE TABLE Acceso
+(
+	IdAcceso INT IDENTITY(1,1) primary key not null,
+	titulo varchar(255) not null,
+	nivel int not null
+);
+
+CREATE TABLE Usuarios
+(
+	IdUsuario INT IDENTITY(1,1) primary key not null,
+	auth varchar(255) not null unique,
+	correo varchar(255) not null,
+	nombre varchar(255) not null,
+);
+
 CREATE TABLE Proveedores
 (
 	idProveedor INT IDENTITY(1,1),
@@ -78,35 +93,19 @@ CREATE TABLE Aseguradoras
 	idAseguradora INT IDENTITY(1,1),
 	NombreAseguradora VARCHAR (50),
 	NumContactoAseg VARCHAR (15),
-	eMailAseg VARCHAR (50)
-
+	eMailAseg VARCHAR (50),
+	IdUsuario INT foreign key references Usuarios(IdUsuario),
 	Constraint PK_Aseguradora Primary Key(idAseguradora)
 );
-
 
 CREATE TABLE Talleres 
 (
 	idTaller INT IDENTITY(1,1),
 	NombreTaller VARCHAR (50),
-	DireccionTaller VARCHAR (50)
-	idAseguradora INT foreign key reference Aseguradoras(idAseguradora),
+	DireccionTaller VARCHAR (50),
+	idAseguradora INT foreign key references Aseguradoras(idAseguradora),
+	IdUsuario INT foreign key references Usuarios(IdUsuario),
 	Constraint PK_Taller Primary Key(idTaller)
-);
-
-
-CREATE TABLE Acceso
-(
-	IdAcceso INT IDENTITY(1,1) primary key not null,
-	titulo varchar(255) not null,
-	nivel int not null
-);
-
-CREATE TABLE Usuarios
-(
-	IdUsuario INT IDENTITY(1,1) primary key not null,
-	auth varchar(255) not null unique,
-	correo varchar(255) not null,
-	nombre varchar(255) not null,
 );
 
 CREATE TABLE Reparaciones
@@ -127,8 +126,6 @@ IdRelacion INT IDENTITY(1,1),
 IdReparacion int foreign key references Reparaciones(idReparacion),
 idPieza int foreign key references Piezas(idPieza),
 )
-
-
 
 insert into Proveedores values 
 ('toyota'),
@@ -159,31 +156,4 @@ insert into Piezas values
 ('2','3','4','w','2','8','0','22'),
 ('3','4','1','e','3','7','0','33'),
 ('4','1','2','r','4','6','0','44')
-
-
-insert into Clientes values 
-('cl1'),
-('cl2'),
-('cl3'),
-('cl4')
-
-insert into Aseguradoras values 
-('ase1','12345678','1@a.com'),
-('ase2','23456789','2@b.com'),
-('ase3','34567891','3@c.com'),
-('ase4','45678912','4@d.com')
-
-
-insert into Usuarios values 
-('1','1'),
-('2','2'),
-('3','3'),
-('4','4')
-
-
-insert into Talleres values 
-('Taller1','Direccion1'),
-('Taller2','Direccion2'),
-('Taller3','Direccion3'),
-('Taller4','Direccion4')
 
