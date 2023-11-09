@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { Space, Layout, Menu, Button, Form, Input, Image, Row, Flex } from "antd";
 import EncabezadoGeneral from "../Elementos/EncabezadoGeneral";
 import MostrarContenidoGeneral from "../Elementos/MostrarContenidoGeneral";
+import VistaAseguradora from "./VistaAseguradora";
+import VistaVentaRepuestos from "./VistaVentaRepuestos";
 
 const boxStyle = {
   //borderRadius: 6,
@@ -46,10 +48,16 @@ export default function Login() {
 
   return (
     <>
-      {PaginaMostrada === "1" ? (
+      {PaginaMostrada === "1" /* 1 */ ? (
         <MostrarContenidoGeneral PagMostrada = {PagMostrada}/>
-      ) : 
-      (
+      )  : 
+      PaginaMostrada === "2" /* 2 */  ? (
+        <VistaAseguradora PagMostrada = {PagMostrada}/>
+      )   : 
+      PaginaMostrada === "3" /* 3 */  ? (
+        <VistaVentaRepuestos PagMostrada = {PagMostrada}/>
+      ) 
+      : (
         <>
           <Header className="App-header">
           <EncabezadoGeneral />

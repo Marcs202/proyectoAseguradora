@@ -32,7 +32,8 @@ const justifyOptions = [
 const alignOptions = ['flex-start', 'center', 'flex-end'];
 
 
-export default function ObjEspera({ MostrarPagina }) {
+
+export default function ObjAsegRequisicion( {MostrarPagina} ) {
     
   const [justify, setJustify] = React.useState(justifyOptions[0]);
   const [alignItems, setAlignItems] = React.useState(alignOptions[0]);
@@ -68,32 +69,48 @@ export default function ObjEspera({ MostrarPagina }) {
 
         </Form.Item>
 
+        <Form.Item style={{
+        paddingLeft: '3%',
+        width: '25%',}}
+        >
+            <Form.Item>
 
+                <label>Mano de Obra:</label>
+                <Input /><br/><br/>
 
+                <label>Repuestos:</label>
+                <Input /><br/><br/>
 
-          <Form.Item name={['user', 'informacion']} 
-                    style={{
-                      paddingLeft: '3%',
-                      marginTop: '2%',
-                      width: '25%'}}
-          >
-            <Form.Item style={{width: '100%'}}>
-              <label>Informacion detallada:</label>
-              <Input.TextArea style={{width: '100%', height: 135, minHeight: 135, maxHeight: 135}}/>
+                <label>Total:</label>
+                <Input />
+
             </Form.Item>
-          </Form.Item>
 
-          <Form.Item style={{ 
+        </Form.Item>
+
+        <Form.Item style={{
+        paddingLeft: '3%',
+        width: '25%',}}
+        >
+            <Form.Item>
+            <label>Informacion detallada:</label>
+              <Input.TextArea style={{width: '100%', minHeight: 180, maxHeight: 180}}/>
+            </Form.Item>
+
+        </Form.Item>
+
+        <Form.Item style={{ 
                       paddingTop:'4%',
-                      paddingLeft: '5%',
+                      paddingLeft: '3%',
                       width: 150}}
           >
             <Form.Item><Button type="primary" style={{backgroundColor: 'green', width: '100%'}} 
-                      onClick={() => { MostrarPagina("1");}}>  Aceptar  </Button></Form.Item>
+                      onClick={() => { MostrarPagina("1");}}>  Autorizar  </Button></Form.Item>
             
             <Form.Item><Button type="primary" style={{backgroundColor: '#D73816', width: '100%' }}>Rechazar</Button></Form.Item>
-            <Form.Item><Button type="primary" style={{backgroundColor: '#D8B115', width: '100%' }}>Modificar</Button></Form.Item>
           </Form.Item>
+
+
 
       </Flex>
 

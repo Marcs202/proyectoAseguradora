@@ -67,7 +67,7 @@ export default function MostrarContenidoGeneral( { PagMostrada } ) {
             
             <Form.Item style={{}}>
                 <Button type="primary" style={{backgroundColor: 'darkred', width:'100%'}} 
-                onClick={() => { PagMostrada("2");}}>Cerrar sesion</Button>
+                onClick={() => { PagMostrada("100");}}>Cerrar sesion</Button>
             </Form.Item>
 
 

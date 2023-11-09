@@ -8,6 +8,7 @@ import {
   Upload,
   message,
   Spin,
+  Select,
 } from 'antd';
 
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
@@ -117,7 +118,7 @@ export default function Ingresar() {
             </Form.Item>
 
             <Form.Item label="Registrar Marca">
-              <Input />
+            <Select />
             </Form.Item>
 
             <Form.Item label="Registrar Modelo">
