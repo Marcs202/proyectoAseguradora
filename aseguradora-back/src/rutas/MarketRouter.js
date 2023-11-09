@@ -2,7 +2,9 @@ import express from 'express';
 import { GetAll,GetPiezasByDepartament,
     GetPiezasByCategory, 
     GetPiezasByCategoryDepartament,
-    GetPiezaById } from './controladores/MarketController.js';
+    GetPiezaById, 
+    PostCotizacion,
+    PutCompra} from './controladores/MarketController.js';
 const router = express.Router();
 
 router.get('/',GetAll );
@@ -10,6 +12,8 @@ router.get('/Departamento',GetPiezasByDepartament);
 router.get('/Id',GetPiezaById);
 router.get('/Categoria',GetPiezasByCategory);
 router.get('/CategoriaDepartamento',GetPiezasByCategoryDepartament);
+router.post('/Cotizacion',PostCotizacion)
+router.put('/Compra',PutCompra)
 export default router;
 
 //todo El carrito debera ser manejado en el front es decir, ahi mismo agregar o quitar cosas
@@ -21,22 +25,17 @@ export default router;
 
 {
   "cotizacion": {
-    "cliente": "Nombre del cliente",
-    "fecha": "Fecha de la cotización",
-    "total":20.0
+    "Costo":20.0
   },
   "piezas": [
     {
       "piezaID": 1,
-      "cantidad": 5,
-      "Subtotal": 10.0
+      "cantidad": 5
     },
     {
       "piezaID": 2,
-      "cantidad": 5,
-      "Subtotal": 10.0
+      "cantidad": 5
     }
-    // Agrega más objetos pieza si es necesario
   ]
 }
 */

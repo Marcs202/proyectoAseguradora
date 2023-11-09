@@ -18,7 +18,8 @@ export const queriesCompras = () => {
         INNER JOIN Proveedores AS Pr ON P.idProveedor = Pr.idProveedor
         INNER JOIN Categorias AS C ON P.idCategoria = C.idCategoria
         INNER JOIN Tiendas AS T ON P.idTienda = T.idTienda
-        INNER JOIN Departamentos AS D ON T.idDepartamento=D.idDepartamento;`,
+        INNER JOIN Departamentos AS D ON T.idDepartamento=D.idDepartamento
+        WHERE P.estadoActivo=1;`,
         getPiezaByDepartament: `
         SELECT
         P.idPieza,
@@ -37,7 +38,7 @@ export const queriesCompras = () => {
         INNER JOIN categorias AS C ON P.idCategoria = C.idCategoria
         INNER JOIN tiendas AS T ON P.idTienda = T.idTienda
         INNER JOIN Departamentos AS D ON T.idDepartamento=D.idDepartamento
-        WHERE D.idDepartamento = @idDepartamento;`,
+        WHERE D.idDepartamento = @idDepartamento and P.estadoActivo=1; `,
         getPiezaByCategory: `
         SELECT
         P.idPieza,
@@ -56,7 +57,7 @@ export const queriesCompras = () => {
         INNER JOIN categorias AS C ON P.idCategoria = C.idCategoria
         INNER JOIN tiendas AS T ON P.idTienda = T.idTienda
         INNER JOIN Departamentos AS D ON T.idDepartamento=D.idDepartamento
-        WHERE C.idCategoria = @idCategoria;
+        WHERE C.idCategoria = @idCategoria AND P.estadoActivo=1;
         `,
         getPiezaByCategoryDepartament:`
         SELECT
@@ -76,7 +77,7 @@ export const queriesCompras = () => {
         INNER JOIN categorias AS C ON P.idCategoria = C.idCategoria
         INNER JOIN tiendas AS T ON P.idTienda = T.idTienda
         INNER JOIN Departamentos AS D ON T.idDepartamento=D.idDepartamento
-        WHERE C.idCategoria = @idCategoria AND D.idDepartamento=@idDepartamento;
+        WHERE C.idCategoria = @idCategoria AND D.idDepartamento=@idDepartamento AND P.estadoActivo=1;
         `,
         getPiezaById:`
         SELECT
@@ -96,7 +97,11 @@ export const queriesCompras = () => {
         INNER JOIN categorias AS C ON P.idCategoria = C.idCategoria
         INNER JOIN tiendas AS T ON P.idTienda = T.idTienda
         INNER JOIN Departamentos AS D ON T.idDepartamento=D.idDepartamento
-        WHERE P.idPieza=@idPieza
-        `
+        WHERE P.idPieza=@idPieza AND P.estadoActivo=1
+        `,
+        insertCotizaciones:`insert into Cotizaciones(Costo) OUTPUT INSERTED.CotizacionID values(@costo)`,
+        insertCotizacionesPiezas:` insert into CotizacionPiezas(idCotizacion,idPieza,Cantidad) values(@idCotizacion,@idPieza,@cantidad)
+        `,
+        realizarCompra:`RealizarCompra`
     };
 };
