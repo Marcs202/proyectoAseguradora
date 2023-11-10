@@ -16,22 +16,37 @@ CREATE TABLE Acceso
 	nivel int not null
 );
 
+INSERT INTO [dbo].[Acceso]
+           ([titulo]
+           ,[nivel])
+     VALUES
+           ('Super Administrador',0),
+		   ('Administrador Aseguradora',1),
+		   ('Administrador Taller',2),
+		   ('Administrador Proveedor',3),
+		   ('Usuario Aseguradora',4),
+		   ('Usuario Taller',5),
+		   ('Usuario Proveedor',6)
+GO
+
 CREATE TABLE Usuarios
 (
 	IdUsuario INT IDENTITY(1,1) primary key not null,
 	auth varchar(255) not null unique,
 	correo varchar(255) not null,
 	nombre varchar(255) not null,
+    IdAcceso INT foreign key references Acceso(IdAcceso),
 );
 
 INSERT INTO [dbo].[Usuarios]
            ([auth]
            ,[correo]
-           ,[nombre])
+           ,[nombre]
+		   ,[IdAcceso])
      VALUES
-           ('P1BdB2rfchhp8RhxvLvXykIeLAo1','js8215001@gmail.com','Taller 1'),
-		   ('rE03ZeFQUbVlUAKHKtTWcMPeqs32','jg447996@gmail.com','Super Admin'),
-		   ('bHUpSltBvWPxSknlUcw7n4HCcOA3','jg252865@gmail.com','Aseguradora 1')
+           ('P1BdB2rfchhp8RhxvLvXykIeLAo1','js8215001@gmail.com','Taller 1',(Select IdAcceso from Acceso where nivel = 2)),
+		   ('rE03ZeFQUbVlUAKHKtTWcMPeqs32','jg447996@gmail.com','Super Admin',(Select IdAcceso from Acceso where nivel = 0)),
+		   ('bHUpSltBvWPxSknlUcw7n4HCcOA3','jg252865@gmail.com','Aseguradora 1',(Select IdAcceso from Acceso where nivel = 1))
 GO
 
 CREATE TABLE Proveedores
@@ -79,7 +94,7 @@ ADD idDepartamento INT;
 -- Paso 2: Definir la restricción de clave foránea
 ALTER TABLE Tiendas
 ADD CONSTRAINT FK_Tiendas_Departamentos FOREIGN KEY (idDepartamento)
-REFERENCES  [dbo].[Departamentos]([idDepartamento]);
+REFERENCES  [Departamentos]([idDepartamento]);
 
 CREATE TABLE Piezas
 (
@@ -171,6 +186,7 @@ CREATE TABLE Reparaciones
 	placa varchar(255) not null,
 	fechaIngreso datetime2 default getdate(),
 	detalles varchar(500) not null,
+	color varchar(50) not null,
 	imagen text not null,
 	idCliente int foreign key references Clientes(idCliente),
 	idMarca int foreign key references Marcas(idMarca),
@@ -252,7 +268,7 @@ CREATE TYPE PiezaTabla AS TABLE
     Cantidad INT
 );
 ---PROCEDIMIENTO PARA COMPRAR 
-go;
+
 CREATE PROCEDURE RealizarCompra
     @CotizacionID INT
 AS
