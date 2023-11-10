@@ -188,6 +188,8 @@ CREATE TABLE Reparaciones
 	detalles varchar(500) not null,
 	color varchar(50) not null,
 	imagen text not null,
+	estado varchar(50) default 'activo',
+	comentario text,
 	idCliente int foreign key references Clientes(idCliente),
 	idMarca int foreign key references Marcas(idMarca),
 	idTaller int foreign key references Talleres(idTaller),
