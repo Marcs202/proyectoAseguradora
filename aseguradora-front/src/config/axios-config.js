@@ -1,18 +1,18 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.baseURL,
+  baseURL: "http://localhost:5000/api/",
 });
 
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    const accessToken = JSON.parse(localStorage.getItem("token"));
+    const accessToken = localStorage.getItem("token");
     console.log('Interceptando la peticion...');
 
-    if (accessToken) {
-      if (config.headers) config.headers.token = accessToken;
-    }
+    // if (accessToken) {
+    //   if (config.headers) config.headers.token = accessToken;
+    // }
     return config;
   },
   (error) => {

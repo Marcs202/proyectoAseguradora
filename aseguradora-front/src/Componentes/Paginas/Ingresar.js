@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Button,
   DatePicker,
@@ -9,9 +9,10 @@ import {
   message,
   Spin,
   Select,
-} from 'antd';
+} from "antd";
 
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import axiosInstance from "../../config/axios-config";
 
 const boxStyle = {
   /*borderRadius: 6,
@@ -20,27 +21,40 @@ const boxStyle = {
   paddingLeft: '1%',
   paddingRight: '2%',
   paddingBottom: '10%',*/
-  backgroundColor: '#bdac9791',
+  backgroundColor: "#bdac9791",
 };
 
 const justifyOptions = [
-  'flex-start',
-  'center',
-  'flex-end',
-  'space-between',
-  'space-around',
-  'space-evenly',
+  "flex-start",
+  "center",
+  "flex-end",
+  "space-between",
+  "space-around",
+  "space-evenly",
 ];
 
-const alignOptions = ['flex-start', 'center', 'flex-end'];
+const alignOptions = ["flex-start", "center", "flex-end"];
 
 export default function Ingresar() {
+  //Datos Formulario
+  const [cliente, setcliente] = useState(null);
+  const [marca, setmarca] = useState(null);
+  const [modelo, setmodelo] = useState(null);
+  const [placa, setplaca] = useState(null);
+  const [color, setcolor] = useState(null);
+  const [fechaIngreso, setfechaIngreso] = useState(null);
+  const [detalles, setdetalles] = useState(null);
+  const [imagen, setimagen] = useState(null);
+  const [nombreImagen, setnombreImagen] = useState(null);
 
-  
+  //Carga Datos Base de Datos
+  const [datosClientes, setdatosClientes] = useState(null);
+  const [datosMarcas, setdatosMarcas] = useState(null);
+
   const [justify, setJustify] = React.useState(justifyOptions[1]);
   const [alignItems, setAlignItems] = React.useState(alignOptions[1]);
 
-  const [componentSize, setComponentSize] = useState('default');
+  const [componentSize, setComponentSize] = useState("default");
 
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
@@ -53,8 +67,64 @@ export default function Ingresar() {
     return e?.fileList;
   };
 
-  const getBase64 = file => {
-    return new Promise(resolve => {
+  useEffect(() => {
+    const CargarClientes = async () => {
+      axiosInstance
+        .get("/reparaciones/clientes")
+        .then((result) => {
+          let objClientes = [];
+          result.data.registros.map((ele) => {
+            objClientes.push({
+              value: ele.idCliente,
+              label: ele.NombreCliente,
+            });
+          });
+          setdatosClientes(objClientes);
+          setcliente(result.data.registros[0].idCliente);
+        })
+        .catch((err) => {
+          console.log("Error:", err);
+        });
+    };
+    CargarClientes();
+
+    const CargarMarcas = async () => {
+      axiosInstance
+        .get("/reparaciones/marcas")
+        .then((result) => {
+          let objMarcas = [];
+          result.data.registros.map((ele) => {
+            objMarcas.push({
+              value: ele.idMarca,
+              label: ele.NombreMarca,
+            });
+          });
+          setdatosMarcas(objMarcas);
+          setmarca(result.data.registros[0].idMarca);
+        })
+        .catch((err) => {
+          console.log("Error:", err);
+        });
+    };
+    CargarMarcas();
+  }, []);
+
+  useEffect(() => {
+    if (datosMarcas !== null && datosClientes !== null) {
+      console.log("Data Cargada");
+    }
+  }, [datosMarcas, datosClientes]);
+
+  const CambioCliente = (value) => {
+    console.log(`Cliente: ${value}`);
+  };
+
+  const CambioMarca = (value) => {
+    console.log(`Marca: ${value}`);
+  };
+
+  const getBase64 = (file) => {
+    return new Promise((resolve) => {
       let baseURL = "";
 
       let reader = new FileReader();
@@ -70,27 +140,23 @@ export default function Ingresar() {
     });
   };
 
-  const handleFileInputChange = e => {
+  const handleFileInputChange = (e) => {
     let file = e.target.files[0];
 
     getBase64(file)
-      .then(result => {
+      .then((result) => {
         file["base64"] = result;
-        let nombre = file.name;
-        let base64 = file.base64;
-        // console.log("Nombre: ", nombre);
-        // console.log("Base64: ", base64);
+        setimagen(file.base64);
+        setnombreImagen(file.name);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
 
-
   return (
-    <Flex style={boxStyle} justify={justify} gap="middle" vertical >
-      
-      <h2 style={{marginLeft: '40%'}}>Registrar Incidente</h2>
+    <Flex style={boxStyle} justify={justify} gap="middle" vertical>
+      <h2 style={{ marginLeft: "40%" }}>Registrar Incidente</h2>
 
       <Form
         labelCol={{
@@ -109,16 +175,30 @@ export default function Ingresar() {
           maxWidth: 1000,
         }}
       >
-        
-        <Flex /*contenedor completo*/>  
-          <Flex gap="middle" vertical style={{width:'50%'}} /*Contenedor izquierdo*/>
-            
+        <Flex /*contenedor completo*/>
+          <Flex gap="middle" vertical style={{ width: "50%" }}>
             <Form.Item label="Nombre de Cliente">
-              <Input />
+              <Select
+                placeholder="Seleccione un Cliente"
+                defaultValue={cliente}
+                onChange={CambioCliente}
+                style={{
+                  width: "100%",
+                }}
+                options={datosClientes}
+              />
             </Form.Item>
 
             <Form.Item label="Registrar Marca">
-            <Select />
+              <Select
+                placeholder="Seleccione una Marca"
+                defaultValue={marca}
+                onChange={CambioMarca}
+                style={{
+                  width: "100%",
+                }}
+                options={datosMarcas}
+              />
             </Form.Item>
 
             <Form.Item label="Registrar Modelo">
@@ -132,36 +212,45 @@ export default function Ingresar() {
             <Form.Item label="Ingresar Color">
               <Input />
             </Form.Item>
-
           </Flex>
 
-
-          <Flex gap="middle" vertical style={{width:'50%'}} /*Contenedor derecho*/>
+          <Flex
+            gap="middle"
+            vertical
+            style={{ width: "50%" }} /*Contenedor derecho*/
+          >
             <Form.Item label="Fecha de ingreso">
-              <DatePicker style={{width: '85%'}} />
+              <DatePicker style={{ width: "85%" }} />
             </Form.Item>
 
-            <Form.Item name={['user', 'informacion']} label="Informacion detallada">
-              <Input.TextArea style={{width: '85%', minHeight: 90, maxHeight: 90}} />
+            <Form.Item
+              name={["user", "informacion"]}
+              label="Informacion detallada"
+            >
+              <Input.TextArea
+                style={{ width: "85%", minHeight: 90, maxHeight: 90 }}
+              />
             </Form.Item>
 
-            <Form.Item label="Cargar fotografia" valuePropName="fileList" getValueFromEvent={normFile}>
-              <input id="upload" type="file" accept="image/*" onChange={handleFileInputChange}/>
+            <Form.Item
+              label="Cargar fotografia"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+            >
+              <input
+                id="upload"
+                type="file"
+                accept="image/*"
+                onChange={handleFileInputChange}
+              />
             </Form.Item>
 
-            <Form.Item label="" style={{marginLeft: '42%'}}>
+            <Form.Item label="" style={{ marginLeft: "42%" }}>
               <Button type="primary">Guardar Nuevo Incidente</Button>
             </Form.Item>
-
           </Flex>
         </Flex>
-
-
-            
       </Form>
     </Flex>
   );
-};
-
-
-
+}
