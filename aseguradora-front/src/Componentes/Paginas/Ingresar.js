@@ -69,7 +69,7 @@ export default function Ingresar() {
 
   useEffect(() => {
     const CargarClientes = async () => {
-      axiosInstance
+      await axiosInstance
         .get("/reparaciones/clientes")
         .then((result) => {
           let objClientes = [];
@@ -89,7 +89,7 @@ export default function Ingresar() {
     CargarClientes();
 
     const CargarMarcas = async () => {
-      axiosInstance
+      await axiosInstance
         .get("/reparaciones/marcas")
         .then((result) => {
           let objMarcas = [];
@@ -116,11 +116,36 @@ export default function Ingresar() {
   }, [datosMarcas, datosClientes]);
 
   const CambioCliente = (value) => {
-    console.log(`Cliente: ${value}`);
+    setcliente(value);
   };
 
   const CambioMarca = (value) => {
-    console.log(`Marca: ${value}`);
+    setmarca(value);
+  };
+
+  const CambioFecha = (dateString) => {
+    setfechaIngreso(dateString);
+  };
+
+  const GuardarIncidente = async () => {
+    await axiosInstance
+      .post("/reparaciones/registrar", {
+        modelo: modelo,
+        placa: placa,
+        fechaIngreso: fechaIngreso,
+        detalles: detalles,
+        idCliente: cliente,
+        idMarca: marca,
+        idTaller: 1,
+        imagen: imagen,
+        imagenTitulo: nombreImagen,
+        color: color,
+      })
+      .then((result) => {
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+      });
   };
 
   const getBase64 = (file) => {
@@ -146,7 +171,7 @@ export default function Ingresar() {
     getBase64(file)
       .then((result) => {
         file["base64"] = result;
-        setimagen(file.base64);
+        setimagen(file.base64.split(',')[1]);
         setnombreImagen(file.name);
       })
       .catch((err) => {
@@ -202,15 +227,27 @@ export default function Ingresar() {
             </Form.Item>
 
             <Form.Item label="Registrar Modelo">
-              <Input />
+              <Input
+                onChange={(e) => {
+                  setmodelo(e.target.value);
+                }}
+              />
             </Form.Item>
 
             <Form.Item label="Ingresar N. de Placa">
-              <Input />
+              <Input
+                onChange={(e) => {
+                  setplaca(e.target.value);
+                }}
+              />
             </Form.Item>
 
             <Form.Item label="Ingresar Color">
-              <Input />
+              <Input
+                onChange={(e) => {
+                  setcolor(e.target.value);
+                }}
+              />
             </Form.Item>
           </Flex>
 
@@ -220,7 +257,11 @@ export default function Ingresar() {
             style={{ width: "50%" }} /*Contenedor derecho*/
           >
             <Form.Item label="Fecha de ingreso">
-              <DatePicker style={{ width: "85%" }} />
+              <DatePicker
+                style={{ width: "85%" }}
+                format={"YYYY-MM-DD"}
+                onChange={CambioFecha}
+              />
             </Form.Item>
 
             <Form.Item
@@ -229,6 +270,9 @@ export default function Ingresar() {
             >
               <Input.TextArea
                 style={{ width: "85%", minHeight: 90, maxHeight: 90 }}
+                onChange={(e) => {
+                  setdetalles(e.target.value);
+                }}
               />
             </Form.Item>
 
@@ -246,7 +290,9 @@ export default function Ingresar() {
             </Form.Item>
 
             <Form.Item label="" style={{ marginLeft: "42%" }}>
-              <Button type="primary">Guardar Nuevo Incidente</Button>
+              <Button type="primary" onClick={GuardarIncidente}>
+                Guardar Nuevo Incidente
+              </Button>
             </Form.Item>
           </Flex>
         </Flex>

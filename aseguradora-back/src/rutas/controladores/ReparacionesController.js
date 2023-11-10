@@ -123,6 +123,7 @@ export const CrearReparacion = async (req, res, next) => {
     .input("idCliente", sql.Int, body.idCliente)
     .input("idMarca", sql.Int, body.idMarca)
     .input("idTaller", sql.Int, body.idTaller)
+    .input("color", sql.VarChar, body.color)
     .query(generateSQL.createReparacion);
     
     // console.log('Operacion Insert:',resInsert);
