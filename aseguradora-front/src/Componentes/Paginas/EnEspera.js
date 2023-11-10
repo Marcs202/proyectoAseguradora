@@ -33,7 +33,6 @@ export default function EnEspera() {
             </Form.Item>
             
             <ObjEspera MostrarPagina = {fMostarAutoMarket}/>
-            <ObjEspera MostrarPagina = {fMostarAutoMarket}/>
           </>
         )
       }
