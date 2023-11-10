@@ -7,7 +7,11 @@ export const queriesReparaciones = (orderBy, ordenar) => {
 
     return {
         getAll: `SELECT * FROM ${tablename}`,
-        createReparacion: `INSERT INTO ${tablename} ([modelo],[placa],[fechaIngreso],[detalles],[imagen],[idCliente],[idMarca],[idTaller],[color]) VALUES
-            (@modelo,@placa,@fechaIngreso,@detalles,@imagen,@idCliente,@idMarca,@idTaller,@color)`,
+        createReparacion: `INSERT INTO ${tablename} ([modelo],[placa],[fechaIngreso],[detalles],[imagen],[idCliente],[idMarca],[idTaller],[color],[estado]) VALUES
+            (@modelo,@placa,@fechaIngreso,@detalles,@imagen,@idCliente,@idMarca,@idTaller,@color,'activo')`,
+        getActivos: `SELECT * FROM ${tablename} where estado = 'activo'`,
+        getEnProceso: `SELECT * FROM ${tablename} where estado = 'proceso'`,
+        getFinalizados: `SELECT * FROM ${tablename} where estado = 'finalizado'`,
+        getRechazado: `SELECT * FROM ${tablename} where estado = 'rechazado'`,
     };
 };

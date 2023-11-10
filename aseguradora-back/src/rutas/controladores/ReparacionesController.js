@@ -34,7 +34,6 @@ export const GetAll = async (req, res, next) => {
   }
 };
 
-
 export const GetClientes = async (req, res, next) => {
 
   let response = {};
@@ -144,6 +143,52 @@ export const CrearReparacion = async (req, res, next) => {
   }
 };
 
+export const GetPorEstado = async (req, res, next) => {
+
+  let response = {};
+  try {
+    const orderby = req.body.orderby || "asc";
+    const ordenar = req.body.ordenar || "idReparacion";
+
+    const pool = await getConnection();
+    if (!pool) return res.status(500).json(errorConnectionMessage);
+
+    const generateSQL = queriesReparaciones(orderby, ordenar);
+    const body = req.body;
+    let query = "";
+    if(body.estado === 'activo'){
+      query = generateSQL.getActivos;
+    }else if(body.estado === 'finalizado'){
+      query = generateSQL.getFinalizados;
+    }else if(body.estado === 'proceso'){
+      query = generateSQL.getEnProceso;
+    }else if(body.estado === 'rechazado'){
+      query = generateSQL.getRechazado
+    }else{
+      query = generateSQL.getAll;
+    }
+    const ressDataToFetch = await pool.request().query(query);
+
+    if (ressDataToFetch.recordset) {
+      const response = {
+        codigo: "00",
+        registros: ressDataToFetch.recordset,
+      };
+      return res.status(200).json(response);
+    } else {
+      const response = {
+        codigo: "00",
+        registros: {},
+      };
+      return res.status(200).json(response);
+    }
+  } catch (error) {
+    console.log("Se produjo una excepcion al procesar la peticion:", error);
+    response.message = "Ocurrió un error al procesar la petición";
+    res.status(400).json(response);
+  }
+};
+
 export const errorEjecucionInsercion = {
   ok: false,
   data: [],
@@ -157,3 +202,4 @@ export const errorParamsMessage = {
   status: 400,
   message: "Parámetros ingresados no válidos",
 };
+
