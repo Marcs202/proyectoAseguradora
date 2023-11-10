@@ -24,6 +24,10 @@ export default function VistaAseguradora( { PagMostrada } ) {
   const [collapsed, setCollapsed] = useState(false);
   const [componenteActivo, setComponenteActivo] = useState("1");
 
+  const LimpiarSesion =()=>{
+    localStorage.clear();
+    PagMostrada("100");
+  }
 
   return (
     <Space direction="vertical" style={{ width: "100%" }} size={[0, 50]}>
@@ -67,7 +71,7 @@ export default function VistaAseguradora( { PagMostrada } ) {
           
           <Form.Item style={{}}>
               <Button type="primary" style={{backgroundColor: 'darkred', width:'100%'}} 
-              onClick={() => { PagMostrada("100");}}>Cerrar sesion</Button>
+              onClick={LimpiarSesion}>Cerrar sesion</Button>
           </Form.Item>
 
 

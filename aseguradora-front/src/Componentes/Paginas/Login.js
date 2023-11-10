@@ -1,10 +1,15 @@
 import "../../App.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Space, Layout, Menu, Button, Form, Input, Image, Row, Flex } from "antd";
 import EncabezadoGeneral from "../Elementos/EncabezadoGeneral";
 import MostrarContenidoGeneral from "../Elementos/MostrarContenidoGeneral";
 import VistaAseguradora from "./VistaAseguradora";
 import VistaVentaRepuestos from "./VistaVentaRepuestos";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { app } from "../../config/firebase/FirebaseConfig";
 
 const boxStyle = {
   //borderRadius: 6,
@@ -27,16 +32,28 @@ const justifyOptions = [
 const alignOptions = ['flex-start', 'center', 'flex-end'];
 const { Header, Footer, } = Layout;
 
-
-
-
 export default function Login() {
-    
+
+  //Variables para sesion
+  const auth = getAuth(app);
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [userInfo, setuserInfo] = useState(null);
+
   const [PaginaMostrada, setPaginaMostrada] = useState("0");
   const [componentSize, setComponentSize] = useState('default');
 
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
+  };
+
+  const handleLogin = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredentials) => {
+        setPaginaMostrada("1");
+        setuserInfo(userCredentials);
+      })
+      .catch((error) => alert(error.message));
   };
   
   const [justify, setJustify] = React.useState(justifyOptions[1]);
@@ -45,6 +62,19 @@ export default function Login() {
   const PagMostrada = (pagina) => {
     setPaginaMostrada(pagina);
   };
+
+  useEffect(()=>{
+    if(userInfo !== null){
+      localStorage.setItem('token',userInfo.user.accessToken);
+      localStorage.setItem('uid',userInfo.user.uid);
+    }
+  },[userInfo])
+
+  useEffect(()=>{
+    if(localStorage.getItem('token') !== null && localStorage.getItem('uid') !== null){
+      setPaginaMostrada("1");
+    }
+  },[userInfo])
 
   return (
     <>
@@ -91,17 +121,21 @@ export default function Login() {
             >
 
                 <Form.Item label="Ingresar usuario">
-                    <Input />
+                    <Input onChange={(e)=>{
+                      setEmail(e.target.value)
+                    }}/>
                 </Form.Item>
 
                 <Form.Item label="Ingresar contraseña">
-                    <Input />
+                    <Input onChange={(e)=>{
+                      setPassword(e.target.value)
+                    }}/>
                 </Form.Item>
                 
                 <br/><br/><br/>
 
                 <Button type="primary" style={{marginLeft:325}} 
-                                      onClick={() => {setPaginaMostrada("1");}}>
+                                      onClick={handleLogin}>
                     Iniciar sesion
                 </Button>
                 <br/><br/><br/>
