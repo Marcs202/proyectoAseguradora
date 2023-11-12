@@ -198,7 +198,7 @@ CREATE TABLE Reparaciones
 CREATE TABLE PiezasReparacion(
 IdRelacion INT IDENTITY(1,1),
 IdReparacion int foreign key references Reparaciones(idReparacion),
-idPieza int foreign key references Piezas(idPieza),
+CotizacionID int foreign key references Cotizaciones(CotizacionID),
 )
 
 insert into Proveedores values 

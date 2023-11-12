@@ -13,5 +13,6 @@ export const queriesReparaciones = (orderBy, ordenar) => {
         getEnProceso: `SELECT ${tablename}.*, (SELECT NombreCliente FROM Clientes where idCliente = ${tablename}.idCliente) as cliente FROM ${tablename} where estado = 'proceso'`,
         getFinalizados: `SELECT ${tablename}.*, (SELECT NombreCliente FROM Clientes where idCliente = ${tablename}.idCliente) as cliente ${tablename} where estado = 'finalizado'`,
         getRechazado: `SELECT ${tablename}.*, (SELECT NombreCliente FROM Clientes where idCliente = ${tablename}.idCliente) as cliente ${tablename} where estado = 'rechazado'`,
+        cambioEstado: `UPDATE ${tablename} SET estado = @estado where idReparacion = @id`
     };
 };
