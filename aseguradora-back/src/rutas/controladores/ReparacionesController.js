@@ -227,11 +227,112 @@ export const GetPorEstado = async (req, res, next) => {
   }
 };
 
+export const AgregarCotizacion = async (req, res, next) => {
+
+  let response = {};
+  try {
+    const orderby = req.body.orderby || "asc";
+    const ordenar = req.body.ordenar || "IdRelacion";
+
+    const body = req.body;
+
+    const pool = await getConnection();
+    if (!pool) return res.status(500).json(errorConnectionMessage);
+
+    const generateSQL = queriesReparaciones(orderby, ordenar);
+
+    const resInsert = await pool.request()
+    .input("reparacion", sql.Int, body.reparacion)
+    .input("cotizacion", sql.Int, body.cotizacion)
+    .query(generateSQL.agregarCotizacion);
+    
+    // console.log('Operacion Insert:',resInsert);
+    
+    if (resInsert.rowsAffected > 0) {
+      const response = {
+        codigo: "00",
+        message: "Cotizacion registrada con exitoso",
+      };
+      return res.status(200).json(response);
+    } else {
+      return res.status(400).json(errorEjecucionInsercion);
+    }
+  } catch (error) {
+    console.log("Se produjo una excepcion al procesar la peticion:", error);
+    response.message = "Ocurrió un error al procesar la petición";
+    res.status(400).json(response);
+  }
+};
+
+export const VerCotizaciones = async (req, res, next) => {
+
+    let response = {};
+    try {
+      const orderby = req.body.orderby || "asc";
+      const ordenar = req.body.ordenar || "IdRelacion";
+  
+      const pool = await getConnection();
+      if (!pool) return res.status(500).json(errorConnectionMessage);
+  
+      const generateSQL = queriesReparaciones(orderby, ordenar);
+  
+      const ressDataToFetch = await pool.request().query(generateSQL.verCotizaciones);
+  
+      if (ressDataToFetch.recordset) {
+        const response = {
+          codigo: "00",
+          registros: ressDataToFetch.recordset,
+        };
+        return res.status(200).json(response);
+      } else {
+        return res.status(400).json(errorParamsMessage);
+      }
+    } catch (error) {
+      console.log("Se produjo una excepcion al procesar la peticion:", error);
+      response.message = "Ocurrió un error al procesar la petición";
+      res.status(400).json(response);
+    }
+  };
+
+  export const VerCotizacionesId = async (req, res, next) => {
+
+    let response = {};
+    try {
+      const orderby = req.body.orderby || "asc";
+      const ordenar = req.body.ordenar || "IdRelacion";
+      
+      const body = req.body;
+
+      const pool = await getConnection();
+      if (!pool) return res.status(500).json(errorConnectionMessage);
+  
+      const generateSQL = queriesReparaciones(orderby, ordenar);
+  
+      const ressDataToFetch = await pool.request()
+      .input("reparacion", sql.Int, body.reparacion)
+      .query(generateSQL.verPorReparacionCotizacion);
+  
+      if (ressDataToFetch.recordset) {
+        const response = {
+          codigo: "00",
+          registros: ressDataToFetch.recordset,
+        };
+        return res.status(200).json(response);
+      } else {
+        return res.status(400).json(errorParamsMessage);
+      }
+    } catch (error) {
+      console.log("Se produjo una excepcion al procesar la peticion:", error);
+      response.message = "Ocurrió un error al procesar la petición";
+      res.status(400).json(response);
+    }
+  };
+
 export const errorEjecucionInsercion = {
   ok: false,
   data: [],
   status: 400,
-  message: "Ocurrio un error al crear incidente",
+  message: "Ocurrio un error al realizar la operacion",
 };
 
 export const errorParamsMessage = {
