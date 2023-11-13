@@ -1,21 +1,23 @@
 import { getConnection, sql } from "../../database/conexion.js";
-import { queriesDepartamentos } from "../../database/consultas/Departamentos.js";
+import { queriesUsuarios } from "../../database/consultas/Usuarios.js";
 
 export const GetAll = async (req, res, next) => {
 
   let response = {};
   try {
+    
     const pool = await getConnection();
     if (!pool) return res.status(500).json(errorConnectionMessage);
 
-    const generateSQL = queriesDepartamentos();
-    const ressDataToFetch = await pool.request().query(generateSQL.getAll);
+    const generateSQL = queriesUsuarios();
+
+    const ressDataToFetch = await pool.request().input("correo",sql.VarChar,req.body.correo).query(generateSQL.getAll);
 
     if (ressDataToFetch.recordset) {
       const response = {
         codigo: "00",
         registros: ressDataToFetch.recordset,
-      }; 
+      };
       return res.status(200).json(response);
     } else {
       return res.status(400).json(errorParamsMessage);
@@ -26,7 +28,6 @@ export const GetAll = async (req, res, next) => {
     res.status(400).json(response);
   }
 };
-
 export const errorParamsMessage = {
   ok: false,
   data: [],

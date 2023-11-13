@@ -1,14 +1,13 @@
 import { getConnection, sql } from "../../database/conexion.js";
-import { queriesDepartamentos } from "../../database/consultas/Departamentos.js";
+import { queriesCategorias } from "../../database/consultas/Categorias.js";
 
 export const GetAll = async (req, res, next) => {
-
   let response = {};
   try {
     const pool = await getConnection();
     if (!pool) return res.status(500).json(errorConnectionMessage);
 
-    const generateSQL = queriesDepartamentos();
+    const generateSQL = queriesCategorias();
     const ressDataToFetch = await pool.request().query(generateSQL.getAll);
 
     if (ressDataToFetch.recordset) {

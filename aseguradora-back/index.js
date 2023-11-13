@@ -5,6 +5,9 @@ import MarketRouter from './src/rutas/MarketRouter.js';
 import ReparacionesRouter from './src/rutas/ReparacionesRouter.js';
 import DepartamentoRouter from './src/rutas/DepartamentoRouter.js'
 import PiezasRouter from './src/rutas/PiezasRouter.js'
+import CategoriasRouter from './src/rutas/CategoriasRouter.js'
+import UsuariosRouter from './src/rutas/UsuariosRouter.js'
+
 export const app = express();
 app.use(cors());
 app.use(express.json({limit: '50mb'}));
@@ -16,6 +19,8 @@ app.use('/api/market',MarketRouter);
 app.use('/api/piezas',PiezasRouter);
 app.use('/api/reparaciones', ReparacionesRouter);
 app.use('/api/departamentos',DepartamentoRouter);
+app.use('/api/categorias',CategoriasRouter);
+app.use('/api/usuarios',UsuariosRouter);
 
 
 const port = 5000;
